@@ -5,6 +5,7 @@ from sites import views
 app_name = 'sites'
 urlpatterns = [
     path('', views.SitesList.as_view()),
+    path('<int:pk>', views.SitesDetail.as_view()),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
