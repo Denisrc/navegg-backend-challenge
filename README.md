@@ -56,7 +56,8 @@ $ ./manage.py runsever
 
 ## How long it took for you to get it done
 
-Took about 8 hours of development
+- Studying the framework(First time using Django REST): 4 Hours 
+- Development: 8 Hours 
 
 ## What you would add/change if you had more time?
 -   Refactor the serializers.py for readbility
