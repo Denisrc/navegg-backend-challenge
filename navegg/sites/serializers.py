@@ -42,7 +42,7 @@ class SitesSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Sites
-        fields = ['id', 'name', 'url', 'category', 'active']
+        fields = ['id', 'name', 'active', 'url', 'category']
 
     # Create the category or url for the sites if necessary
     def handle_reference(self, instance, reference_instance, data_list):
@@ -64,6 +64,8 @@ class SitesSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         site = Sites()
         site.name = validated_data['name']
+        if 'active' in validated_data:
+            site.active = validated_data['active']
 
         # Save the site to be able to link the category and url to the site
         site.save()
@@ -99,6 +101,7 @@ class SitesSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         instance.name = validated_data['name']
+        instance.active = validated_data['active']
         instance.save()
 
         errors = { 'errors': []}
