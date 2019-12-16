@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import os
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'navegg.settings')
 
@@ -11,10 +12,9 @@ def create_model(row):
     print(f'Create site {row[0]} with status {row[3]}:')
     print(f'\tURLS: {row[1]}')
     print(f'\tCategories: {row[2]}')
-    name = row[0]
+
     urls = row[1].split(';')
     categories = row[2].split(';')
-    status = row[3]
 
     site = Sites()
     site.name = row[0]

@@ -23,7 +23,7 @@ class SiteGetDeleteTestCase(APITestCase):
         site2.save()
 
     def test_site_get_list(self):
-        response = self.client.get('/api/site/')
+        response = self.client.get('/item/')
         response_data = response.data
 
         self.assertTrue(response_data[0]['active'])
@@ -37,7 +37,7 @@ class SiteGetDeleteTestCase(APITestCase):
         self.assertEquals(response_data[1]['category'][0]['description'], 'test2')
 
     def test_site_get_existing_id(self):
-        response = self.client.get('/api/site/1')
+        response = self.client.get('/item/1')
         response_data = response.data
 
         self.assertTrue(response_data['active'])
@@ -47,7 +47,7 @@ class SiteGetDeleteTestCase(APITestCase):
 
     
     def test_site_get_not_existing_id(self):
-        response = self.client.get('/api/site/5')
+        response = self.client.get('/item/5')
         
         self.assertEquals(str(response.data['detail']), 'Not found.')
 
@@ -55,7 +55,7 @@ class SiteGetDeleteTestCase(APITestCase):
         sites_list = Sites.objects.all()
 
         self.assertEquals(2, len(sites_list))
-        self.client.delete('/api/site/1')
+        self.client.delete('/item/1')
 
         sites_list = Sites.objects.all()
 
@@ -67,7 +67,7 @@ class SiteGetDeleteTestCase(APITestCase):
         sites_list = Sites.objects.all()
 
         self.assertEquals(2, len(sites_list))
-        response = self.client.delete('/api/site/100')
+        response = self.client.delete('/item/100')
 
         sites_list = Sites.objects.all()
 
@@ -103,7 +103,7 @@ class SiteCreateTestCase(APITestCase):
     def test_site_create_active(self):
         body = self.base_body
 
-        request = self.client.post('/api/site/', body, format='json')
+        request = self.client.post('/item/', body, format='json')
         
         self.assertEquals(request.status_code, status.HTTP_201_CREATED)
         self.assertEquals(request.data['id'], 3)
@@ -126,7 +126,7 @@ class SiteCreateTestCase(APITestCase):
         body = self.base_body
         body['active'] = False
 
-        request = self.client.post('/api/site/', body, format='json')
+        request = self.client.post('/item/', body, format='json')
         
         self.assertEquals(request.status_code, status.HTTP_201_CREATED)
         self.assertEquals(request.data['id'], 3)
@@ -149,7 +149,7 @@ class SiteCreateTestCase(APITestCase):
         body = self.base_body
         body['url'].append({'description': 'newsite.com/new'})
 
-        request = self.client.post('/api/site/', body, format='json')
+        request = self.client.post('/item/', body, format='json')
         
         self.assertEquals(request.status_code, status.HTTP_201_CREATED)
         self.assertEquals(request.data['id'], 3)
@@ -173,7 +173,7 @@ class SiteCreateTestCase(APITestCase):
         body = self.base_body
         body['category'].append({'description': 'newsite2'})
 
-        request = self.client.post('/api/site/', body, format='json')
+        request = self.client.post('/item/', body, format='json')
         
         self.assertEquals(request.status_code, status.HTTP_201_CREATED)
         self.assertEquals(request.data['id'], 3)
@@ -200,7 +200,7 @@ class SiteCreateTestCase(APITestCase):
 
         self.assertEquals(2, len(categories))
 
-        request = self.client.post('/api/site/', body, format='json')
+        request = self.client.post('/item/', body, format='json')
         
         self.assertEquals(request.status_code, status.HTTP_201_CREATED)
         
@@ -216,7 +216,7 @@ class SiteCreateTestCase(APITestCase):
 
         self.assertEquals(2, len(categories))
 
-        request = self.client.post('/api/site/', body, format='json')
+        request = self.client.post('/item/', body, format='json')
         
         self.assertEquals(request.status_code, status.HTTP_201_CREATED)
         
@@ -232,7 +232,7 @@ class SiteCreateTestCase(APITestCase):
 
         self.assertEquals(2, len(urls))
 
-        request = self.client.post('/api/site/', body, format='json')
+        request = self.client.post('/item/', body, format='json')
         
         self.assertEquals(request.status_code, status.HTTP_201_CREATED)
         
@@ -248,7 +248,7 @@ class SiteCreateTestCase(APITestCase):
 
         self.assertEquals(2, len(urls))
 
-        request = self.client.post('/api/site/', body, format='json')
+        request = self.client.post('/item/', body, format='json')
         
         self.assertEquals(request.status_code, status.HTTP_201_CREATED)
         
@@ -257,7 +257,7 @@ class SiteCreateTestCase(APITestCase):
         self.assertEquals(2, len(urls))
 
     def test_site_create_empty(self):
-        request = self.client.post('/api/site/', {}, format='json')
+        request = self.client.post('/item/', {}, format='json')
 
         self.assertEquals(request.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -268,7 +268,7 @@ class SiteCreateTestCase(APITestCase):
     def test_site_create_missing_category(self):
         body = self.base_body
         del body['category']
-        request = self.client.post('/api/site/', body, format='json')
+        request = self.client.post('/item/', body, format='json')
 
         self.assertEquals(request.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -277,7 +277,7 @@ class SiteCreateTestCase(APITestCase):
     def test_site_create_missing_url(self):
         body = self.base_body
         del body['url']
-        request = self.client.post('/api/site/', body, format='json')
+        request = self.client.post('/item/', body, format='json')
 
         self.assertEquals(request.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -288,7 +288,7 @@ class SiteCreateTestCase(APITestCase):
         body = self.base_body
         body['url'] = []
 
-        request = self.client.post('/api/site/', body, format='json')
+        request = self.client.post('/item/', body, format='json')
         self.assertEquals(request.status_code, status.HTTP_400_BAD_REQUEST)
 
         self.assertEquals(str(request.data['errors'][0]['url']), 'At least one URL is required')
@@ -297,7 +297,7 @@ class SiteCreateTestCase(APITestCase):
         body = self.base_body
         body['category'] = []
 
-        request = self.client.post('/api/site/', body, format='json')
+        request = self.client.post('/item/', body, format='json')
         self.assertEquals(request.status_code, status.HTTP_400_BAD_REQUEST)
 
         self.assertEquals(str(request.data['errors'][0]['category']), 'At least one Category is required')
@@ -306,7 +306,7 @@ class SiteCreateTestCase(APITestCase):
         body = self.base_body
         body['name'] = 'Test'
 
-        request = self.client.post('/api/site/', body, format='json')
+        request = self.client.post('/item/', body, format='json')
         self.assertEquals(request.status_code, status.HTTP_400_BAD_REQUEST)
 
         self.assertEquals(str(request.data['name']), 'This name already exists')
@@ -352,7 +352,7 @@ class SiteUpdateTestCase(APITestCase):
         self.assertEquals(len(categories), 1)
         self.assertEquals(categories[0].description, 'test')
 
-        request = self.client.patch('/api/site/1', body, format='json')
+        request = self.client.patch('/item/1', body, format='json')
         
         self.assertEquals(request.status_code, status.HTTP_200_OK)
         self.assertEquals(request.data['id'], 1)
@@ -388,7 +388,7 @@ class SiteUpdateTestCase(APITestCase):
         self.assertEquals(len(categories), 1)
         self.assertEquals(categories[0].description, 'test')
 
-        request = self.client.patch('/api/site/1', body, format='json')
+        request = self.client.patch('/item/1', body, format='json')
         
         self.assertEquals(request.status_code, status.HTTP_200_OK)
         self.assertEquals(request.data['id'], 1)
@@ -411,7 +411,7 @@ class SiteUpdateTestCase(APITestCase):
         body = self.base_body
         body['url'].append({'description': 'newsite.com/new'})
 
-        request = self.client.patch('/api/site/1', body, format='json')
+        request = self.client.patch('/item/1', body, format='json')
         
         self.assertEquals(request.status_code, status.HTTP_200_OK)
         self.assertEquals(request.data['id'], 1)
@@ -435,7 +435,7 @@ class SiteUpdateTestCase(APITestCase):
         body = self.base_body
         body['category'].append({'description': 'newsite2'})
 
-        request = self.client.patch('/api/site/1', body, format='json')
+        request = self.client.patch('/item/1', body, format='json')
         
         self.assertEquals(request.status_code, status.HTTP_200_OK)
         self.assertEquals(request.data['id'], 1)
@@ -462,7 +462,7 @@ class SiteUpdateTestCase(APITestCase):
 
         self.assertEquals(2, len(categories))
 
-        request = self.client.patch('/api/site/1', body, format='json')
+        request = self.client.patch('/item/1', body, format='json')
         
         self.assertEquals(request.status_code, status.HTTP_200_OK)
         
@@ -478,7 +478,7 @@ class SiteUpdateTestCase(APITestCase):
 
         self.assertEquals(2, len(categories))
 
-        request = self.client.patch('/api/site/1', body, format='json')
+        request = self.client.patch('/item/1', body, format='json')
         
         self.assertEquals(request.status_code, status.HTTP_200_OK)
         
@@ -494,7 +494,7 @@ class SiteUpdateTestCase(APITestCase):
 
         self.assertEquals(2, len(urls))
 
-        request = self.client.patch('/api/site/1', body, format='json')
+        request = self.client.patch('/item/1', body, format='json')
         
         self.assertEquals(request.status_code, status.HTTP_200_OK)
         
@@ -510,7 +510,7 @@ class SiteUpdateTestCase(APITestCase):
 
         self.assertEquals(2, len(urls))
 
-        request = self.client.patch('/api/site/1', body, format='json')
+        request = self.client.patch('/item/1', body, format='json')
         
         self.assertEquals(request.status_code, status.HTTP_200_OK)
         
@@ -519,7 +519,7 @@ class SiteUpdateTestCase(APITestCase):
         self.assertEquals(2, len(urls))
 
     def test_site_update_empty(self):
-        request = self.client.patch('/api/site/1', {}, format='json')
+        request = self.client.patch('/item/1', {}, format='json')
 
         self.assertEquals(request.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -530,7 +530,7 @@ class SiteUpdateTestCase(APITestCase):
     def test_site_update_missing_category(self):
         body = self.base_body
         del body['category']
-        request = self.client.patch('/api/site/1', body, format='json')
+        request = self.client.patch('/item/1', body, format='json')
 
         self.assertEquals(request.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -539,7 +539,7 @@ class SiteUpdateTestCase(APITestCase):
     def test_site_update_missing_url(self):
         body = self.base_body
         del body['url']
-        request = self.client.patch('/api/site/1', body, format='json')
+        request = self.client.patch('/item/1', body, format='json')
 
         self.assertEquals(request.status_code, status.HTTP_400_BAD_REQUEST)
 
@@ -550,7 +550,7 @@ class SiteUpdateTestCase(APITestCase):
         body = self.base_body
         body['url'] = []
 
-        request = self.client.patch('/api/site/1', body, format='json')
+        request = self.client.patch('/item/1', body, format='json')
         self.assertEquals(request.status_code, status.HTTP_400_BAD_REQUEST)
 
         self.assertEquals(str(request.data['errors'][0]['url']), 'At least one URL is required')
@@ -559,7 +559,7 @@ class SiteUpdateTestCase(APITestCase):
         body = self.base_body
         body['category'] = []
 
-        request = self.client.patch('/api/site/1', body, format='json')
+        request = self.client.patch('/item/1', body, format='json')
         self.assertEquals(request.status_code, status.HTTP_400_BAD_REQUEST)
 
         self.assertEquals(str(request.data['errors'][0]['category']), 'At least one Category is required')
@@ -568,7 +568,7 @@ class SiteUpdateTestCase(APITestCase):
         body = self.base_body
         body['name'] = 'Test 2'
 
-        request = self.client.patch('/api/site/1', body, format='json')
+        request = self.client.patch('/item/1', body, format='json')
         self.assertEquals(request.status_code, status.HTTP_400_BAD_REQUEST)
 
         self.assertEquals(str(request.data['name']), 'This name already exists')
@@ -578,7 +578,7 @@ class SiteUpdateTestCase(APITestCase):
         body = self.base_body
         body['name'] = 'Test'
 
-        request = self.client.patch('/api/site/1', body, format='json')
+        request = self.client.patch('/item/1', body, format='json')
         self.assertEquals(request.status_code, status.HTTP_200_OK)
 
         self.assertEquals(str(request.data['name']), 'Test')
