@@ -30,6 +30,11 @@ To start the server
 $ ./manage.py runsever
 ```
 
+To run de tests
+```sh
+$ ./manage.py test
+```
+
 
 ### API endpoints:
     GET:    /item/ -> list all active register in the database.
