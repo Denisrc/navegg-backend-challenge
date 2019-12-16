@@ -30,7 +30,7 @@ To start the server
 $ ./manage.py runsever
 ```
 
-To run de tests
+To run the tests
 ```sh
 $ ./manage.py test
 ```
