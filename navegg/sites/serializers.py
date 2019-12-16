@@ -62,6 +62,10 @@ class SitesSerializer(serializers.ModelSerializer):
                 instance.url.add(reference_object)
 
     def create(self, validated_data):
+
+        if Sites.objects.filter(name=validated_data['name']).exists():
+            raise serializers.ValidationError({'name': 'This name already exists'})
+
         site = Sites()
         site.name = validated_data['name']
         if 'active' in validated_data:
@@ -100,8 +104,14 @@ class SitesSerializer(serializers.ModelSerializer):
         return site
 
     def update(self, instance, validated_data):
+
+        if Sites.objects.filter(name=validated_data['name']).exists() and \
+            instance.name != validated_data['name']:
+            raise serializers.ValidationError({'name': 'This name already exists'})
+
         instance.name = validated_data['name']
-        instance.active = validated_data['active']
+        if 'active' in validated_data:
+            instance.active = validated_data['active']
         instance.save()
 
         errors = { 'errors': []}

@@ -302,6 +302,15 @@ class SiteCreateTestCase(APITestCase):
 
         self.assertEquals(str(request.data['errors'][0]['category']), 'At least one Category is required')
 
+    def test_site_create_name_already_exist(self):
+        body = self.base_body
+        body['name'] = 'Test'
+
+        request = self.client.post('/api/site/', body, format='json')
+        self.assertEquals(request.status_code, status.HTTP_400_BAD_REQUEST)
+
+        self.assertEquals(str(request.data['name']), 'This name already exists')
+
 # Test the PATCH method
 class SiteUpdateTestCase(APITestCase):
     def setUp(self):
@@ -555,3 +564,21 @@ class SiteUpdateTestCase(APITestCase):
 
         self.assertEquals(str(request.data['errors'][0]['category']), 'At least one Category is required')
 
+    def test_site_update_name_already_exist(self):
+        body = self.base_body
+        body['name'] = 'Test 2'
+
+        request = self.client.patch('/api/site/1', body, format='json')
+        self.assertEquals(request.status_code, status.HTTP_400_BAD_REQUEST)
+
+        self.assertEquals(str(request.data['name']), 'This name already exists')
+
+
+    def test_site_update_name_already_exist_same_object(self):
+        body = self.base_body
+        body['name'] = 'Test'
+
+        request = self.client.patch('/api/site/1', body, format='json')
+        self.assertEquals(request.status_code, status.HTTP_200_OK)
+
+        self.assertEquals(str(request.data['name']), 'Test')
